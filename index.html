@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiAdit - Sistem Audit & Freelance Terpercaya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="antialiased">
+
+    <!-- LOGIN / REGISTER SCREEN -->
+    <div id="auth-screen" class="min-h-screen flex items-center justify-center p-4 bg-[#b2d8d8]">
+        <div class="w-full max-w-2xl glass-card p-10 fade-in">
+            <div class="text-center mb-8">
+                <div class="logo-container">
+                    <!-- Custom Created "SA" Logo SVG -->
+                    <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="100" height="100" rx="20" fill="#1C0770"/>
+                        <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="45" fill="#b2d8d8">SA</text>
+                        <rect x="10" y="75" width="80" height="5" rx="2.5" fill="#b2d8d8"/>
+                    </svg>
+                </div>
+                <h1 class="text-4xl font-black text-[#1C0770] tracking-tighter italic">SiAdit<span class="text-white">.</span></h1>
+                <p class="text-[#1C0770] font-bold text-xs uppercase tracking-widest mt-2">Professional Audit Ecosystem</p>
+            </div>
+
+            <!-- Login Box -->
+            <div id="login-container" class="max-w-md mx-auto">
+                <form onsubmit="doAuth(event, 'login')" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-black uppercase mb-1">Email Bisnis</label>
+                        <input type="email" id="auth-email" placeholder="admin@bisnis.com" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-black uppercase mb-1">Password</label>
+                        <input type="password" id="auth-pass" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="w-full py-4 bg-[#1C0770] text-white font-black rounded-xl hover:bg-white hover:text-[#1C0770] border-2 border-[#1C0770] transition-all uppercase tracking-widest text-sm">Masuk Dashboard</button>
+                </form>
+                <p class="text-center mt-6 text-sm font-bold text-[#1C0770]">Belum ada akun? <button onclick="toggleAuth(true)" class="underline font-black">Daftar Sekarang</button></p>
+            </div>
+
+            <!-- Register Box -->
+            <div id="register-container" class="hidden">
+                <form onsubmit="doAuth(event, 'register')" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-black uppercase mb-1">Nama Bisnis</label>
+                            <input type="text" id="reg-biz" placeholder="PT. Nama Usaha" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black uppercase mb-1">Jenis Usaha</label>
+                            <select id="reg-type" required>
+                                <option value="">Pilih Jenis</option>
+                                <option value="Retail">Retail / Dagang</option>
+                                <option value="Service">Jasa</option>
+                                <option value="F&B">Makanan & Minuman</option>
+                                <option value="Manufacture">Manufaktur</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black uppercase mb-1">Nama Owner</label>
+                            <input type="text" id="reg-owner" placeholder="Nama Lengkap" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black uppercase mb-1">No. Telp / WA</label>
+                            <input type="tel" id="reg-phone" placeholder="0812..." required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black uppercase mb-1">Email</label>
+                            <input type="email" id="reg-email" placeholder="owner@gmail.com" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black uppercase mb-1">Tanggal Berdiri</label>
+                            <input type="date" id="reg-date" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-black uppercase mb-1">Alamat Bisnis</label>
+                        <textarea id="reg-address" rows="2" placeholder="Alamat lengkap operasional..." required></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-black uppercase mb-1">Password</label>
+                        <input type="password" id="reg-pass" placeholder="Min. 8 Karakter" required>
+                    </div>
+                    <button type="submit" class="w-full py-4 bg-[#1C0770] text-white font-black rounded-xl hover:bg-white hover:text-[#1C0770] border-2 border-[#1C0770] transition-all uppercase tracking-widest text-sm">Buat Akun Bisnis</button>
+                </form>
+                <p class="text-center mt-6 text-sm font-bold text-[#1C0770]">Sudah ada akun? <button onclick="toggleAuth(false)" class="underline font-black">Kembali Login</button></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP DASHBOARD -->
+    <div id="main-app" class="hidden min-h-screen">
+        
+        <!-- Toggle Sidebar Button -->
+        <button id="toggle-sidebar-btn" onclick="toggleSidebar()" class="p-3 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16m-7 6h7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed left-0 top-0 h-full w-72 bg-white border-r-4 border-[#1C0770] p-6 overflow-y-auto">
+            <div class="flex items-center gap-3 mb-10 pb-6 border-b-2 border-slate-100">
+                <div class="w-10 h-10 flex items-center justify-center">
+                    <!-- Custom "SA" Logo SVG in Sidebar -->
+                    <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="100" height="100" rx="20" fill="#1C0770"/>
+                        <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="45" fill="#b2d8d8">SA</text>
+                    </svg>
+                </div>
+                <h2 class="text-xl font-black italic text-[#1C0770]">SiAdit.</h2>
+                <button onclick="toggleSidebar()" class="ml-auto md:hidden font-black text-2xl text-[#1C0770]">×</button>
+            </div>
+
+            <nav class="space-y-2">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 px-2">Main Menu</p>
+                <div onclick="showPage('dash')" id="nav-dash" class="sidebar-item active">
+                    <span class="mr-3">🏠</span> Beranda Utama
+                </div>
+                <div onclick="showPage('cash')" id="nav-cash" class="sidebar-item">
+                    <span class="mr-3">💰</span> Arus Kas Digital
+                </div>
+                <div onclick="showPage('audit')" id="nav-audit" class="sidebar-item">
+                    <span class="mr-3">🛡️</span> Audit AI (Analisis)
+                </div>
+
+                <div class="h-4"></div>
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 px-2">Freelance Ecosystem</p>
+                <div onclick="showPage('find-auditor')" id="nav-find" class="sidebar-item">
+                    <span class="mr-3">🔎</span> Cari Ahli Audit
+                </div>
+                <div onclick="showPage('join-partner')" id="nav-join" class="sidebar-item">
+                    <span class="mr-3">🤝</span> Jadi Partner Jasa
+                </div>
+
+                <div class="h-4"></div>
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 px-2">Account</p>
+                <div onclick="showPage('premium')" id="nav-premium" class="sidebar-item bg-blue-50 text-[#1C0770]">
+                    <span class="mr-3">💎</span> Upgrade Ke Pro
+                </div>
+                <div onclick="logout()" class="sidebar-item text-red-600">
+                    <span class="mr-3">🚪</span> Logout Sistem
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Body -->
+        <main id="main-content" class="ml-72 p-10 transition-all duration-300">
+            
+            <!-- PAGE: DASHBOARD -->
+            <section id="page-dash" class="page-content fade-in pt-12">
+                <div class="flex justify-between items-end mb-10">
+                    <div>
+                        <h1 class="text-4xl font-black tracking-tighter text-[#1C0770]">Halo, <span id="display-owner-name">Owner</span>!</h1>
+                        <p class="text-[#1C0770] font-bold mt-1">Bisnis: <span id="display-biz-name" class="underline">...</span> (<span id="display-biz-type" class="text-slate-500 text-sm">Retail</span>)</p>
+                    </div>
+                    <button onclick="showPage('premium')" class="bg-[#1C0770] text-white px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#b2d8d8] hover:text-[#1C0770] border-2 border-[#1C0770] transition-all">
+                        🚀 Upgrade Akun
+                    </button>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div class="glass-card p-8 bg-[#1C0770] text-white">
+                        <p class="text-[10px] font-black uppercase text-[#b2d8d8] mb-2">Total Saldo Kas</p>
+                        <h3 id="stat-saldo" class="text-3xl font-black">Rp 0</h3>
+                        <p class="text-[10px] mt-4 font-bold text-slate-400 italic">Terpantau otomatis via AI</p>
+                    </div>
+                    <div class="glass-card p-8 bg-white">
+                        <p class="text-[10px] font-black uppercase text-slate-400 mb-2">Integritas Audit</p>
+                        <h3 class="text-3xl font-black text-[#1C0770]">94.8%</h3>
+                        <div class="w-full h-2 bg-slate-100 mt-4 rounded-full overflow-hidden">
+                            <div class="w-[94%] h-full bg-green-500"></div>
+                        </div>
+                    </div>
+                    <div class="glass-card p-8 bg-[#b2d8d8] border-4 border-[#1C0770]">
+                        <p class="text-[10px] font-black uppercase text-[#1C0770] mb-2">Pemberitahuan</p>
+                        <h3 class="text-lg font-black text-[#1C0770] leading-tight">2 Transaksi perlu verifikasi</h3>
+                        <button onclick="showPage('audit')" class="mt-2 text-[10px] font-black underline uppercase text-[#1C0770]">Lihat Detail</button>
+                    </div>
+                </div>
+
+                <!-- Quick Actions & Chart -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <div class="lg:col-span-8 glass-card p-8">
+                        <h4 class="text-xl font-black mb-6 text-[#1C0770]">Analisis Arus Kas Terkini</h4>
+                        <div class="h-80 w-full bg-slate-50 rounded-xl flex items-center justify-center">
+                            <canvas id="dash-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 space-y-4">
+                        <div class="glass-card p-6 bg-white">
+                            <h4 class="text-xs font-black uppercase mb-4 text-[#1C0770]">Aksi Cepat</h4>
+                            <div class="space-y-2">
+                                <button onclick="openTxModal('in')" class="w-full p-4 bg-green-50 text-green-800 font-black rounded-xl border-2 border-green-800 text-left hover:bg-green-100">
+                                    + Catat Pemasukan
+                                </button>
+                                <button onclick="openTxModal('out')" class="w-full p-4 bg-red-50 text-red-800 font-black rounded-xl border-2 border-red-800 text-left hover:bg-red-100">
+                                    - Catat Pengeluaran
+                                </button>
+                                <button onclick="showPage('find-auditor')" class="w-full p-4 bg-[#1C0770] text-white font-black rounded-xl border-2 border-[#1C0770] text-left">
+                                    🔎 Cari Auditor
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE: CASH FLOW -->
+            <section id="page-cash" class="page-content hidden fade-in pt-12">
+                <button onclick="showPage('dash')" class="btn-back">← KEMBALI KE BERANDA</button>
+                <div class="flex justify-between items-center mb-10">
+                    <h2 class="text-4xl font-black tracking-tighter text-[#1C0770]">Buku Kas Digital</h2>
+                    <div class="flex gap-2">
+                        <button onclick="openTxModal('in')" class="btn-action bg-green-600 border-green-600">DEBIT (+)</button>
+                        <button onclick="openTxModal('out')" class="btn-action bg-red-600 border-red-600">KREDIT (-)</button>
+                    </div>
+                </div>
+
+                <div class="glass-card overflow-x-auto">
+                    <table class="w-full text-left min-w-[600px]">
+                        <thead class="bg-[#1C0770] text-white">
+                            <tr>
+                                <th class="p-5 text-xs font-black uppercase">Tanggal</th>
+                                <th class="p-5 text-xs font-black uppercase">Deskripsi</th>
+                                <th class="p-5 text-xs font-black uppercase text-right">Debit</th>
+                                <th class="p-5 text-xs font-black uppercase text-right">Kredit</th>
+                                <th class="p-5 text-xs font-black uppercase text-center">Audit</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tx-history-body" class="text-[#1C0770] font-bold">
+                            <!-- JS Injection -->
+                        </tbody>
+                    </table>
+                    <div id="no-tx-hint" class="p-20 text-center">
+                        <p class="text-slate-400 font-black uppercase italic">Belum ada transaksi tercatat</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE: AUDIT AI -->
+            <section id="page-audit" class="page-content hidden fade-in pt-12">
+                <button onclick="showPage('dash')" class="btn-back">← KEMBALI KE BERANDA</button>
+                <div class="max-w-4xl mb-10">
+                    <h2 class="text-4xl font-black tracking-tighter text-[#1C0770]">Audit Digital Engine</h2>
+                    <p class="text-[#1C0770] font-bold mt-2">Mesin AI SiAdit memindai setiap transaksi untuk mendeteksi anomali finansial.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass-card p-10 bg-[#1C0770] text-white">
+                        <div class="flex justify-between items-start mb-10">
+                            <h4 class="text-xl font-black text-[#b2d8d8]">Hasil Pemindaian AI</h4>
+                            <span class="bg-green-500 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase">Status: Aman</span>
+                        </div>
+                        <div id="audit-log-list" class="space-y-4">
+                            <p class="text-slate-400 italic text-sm">Menunggu input transaksi...</p>
+                        </div>
+                    </div>
+                    <div class="space-y-6 text-[#1C0770]">
+                        <div class="glass-card p-8 border-4 border-[#1C0770]">
+                            <h4 class="text-sm font-black uppercase mb-4">Rekomendasi Keamanan</h4>
+                            <ul class="space-y-4 font-bold text-sm">
+                                <li class="flex gap-3"><span class="text-[#b2d8d8] font-black">●</span> Aktifkan verifikasi 2 langkah pengeluaran.</li>
+                                <li class="flex gap-3"><span class="text-[#b2d8d8] font-black">●</span> Rekonsiliasi API Bank (Fitur Pro).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE: FIND AUDITOR -->
+            <section id="page-find-auditor" class="page-content hidden fade-in pt-12">
+                <button onclick="showPage('dash')" class="btn-back">← KEMBALI KE BERANDA</button>
+                <div class="mb-10 text-[#1C0770]">
+                    <h2 class="text-4xl font-black tracking-tighter">Direktori Auditor Freelance</h2>
+                    <p class="font-bold">Temukan profesional keuangan terpercaya.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-card p-6 flex flex-col justify-between hover:bg-[#b2d8d8]/10 transition-colors">
+                        <div>
+                            <div class="w-20 h-20 bg-[#1C0770] rounded-2xl mb-4 overflow-hidden flex items-center justify-center p-2">
+                                <!-- Minimal SA icon for auditor -->
+                                <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="100" height="100" rx="20" fill="#b2d8d8"/>
+                                    <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="45" fill="#1C0770">SA</text>
+                                </svg>
+                            </div>
+                            <h5 class="text-lg font-black text-[#1C0770]">Andi Saputra, Ak.</h5>
+                            <p class="text-[10px] font-black uppercase text-slate-500 mb-4">Spesialis UMKM</p>
+                        </div>
+                        <div class="pt-6 border-t-2 border-[#1C0770] flex justify-between items-center">
+                            <p class="text-sm font-black text-[#1C0770]">Rp 250k/jam</p>
+                            <button class="p-3 bg-[#1C0770] text-white rounded-lg hover:bg-[#b2d8d8] hover:text-[#1C0770]">💬</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE: JOIN PARTNER -->
+            <section id="page-join-partner" class="page-content hidden fade-in pt-12">
+                <button onclick="showPage('dash')" class="btn-back">← KEMBALI KE BERANDA</button>
+                <div class="max-w-3xl text-[#1C0770]">
+                    <h2 class="text-4xl font-black tracking-tighter">Gabung Mitra Auditor</h2>
+                    <p class="font-bold mt-2 mb-10 text-[#1C0770]">Bangun reputasi profesional Anda secara digital.</p>
+                    
+                    <div class="glass-card p-10 bg-white">
+                        <form onsubmit="event.preventDefault(); alert('Aplikasi Anda terkirim!')" class="space-y-6">
+                            <input type="text" placeholder="Gelar (Contoh: S.E, Ak, CA)" required>
+                            <input type="number" placeholder="Pengalaman (Tahun)" required>
+                            <input type="url" placeholder="Link Portofolio / CV" required>
+                            <button type="submit" class="w-full py-4 bg-[#1C0770] text-white font-black rounded-xl border-2 border-[#1C0770]">DAFTAR MITRA</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE: PREMIUM UPGRADE -->
+            <section id="page-premium" class="page-content hidden fade-in pt-12">
+                <button onclick="showPage('dash')" class="btn-back">← KEMBALI KE BERANDA</button>
+                <div id="premium-pricing" class="max-w-5xl mx-auto text-center text-[#1C0770]">
+                    <h2 class="text-5xl font-black tracking-tighter mb-4 italic">Beralih ke <span class="text-[#b2d8d8]">SiAdit Pro</span></h2>
+                    <p class="font-bold mb-12">Fitur eksklusif untuk akurasi finansial mutlak.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="glass-card p-10 bg-white text-left">
+                            <h4 class="text-2xl font-black mb-4">Fitur Eksklusif Pro</h4>
+                            <ul class="space-y-4 mb-10 font-bold">
+                                <li>✓ Sinkronisasi API Bank</li>
+                                <li>✓ Laporan PDF QR Terverifikasi</li>
+                                <li>✓ Deteksi Fraud Lanjut</li>
+                            </ul>
+                            <p class="text-4xl font-black">Rp 99.000 <span class="text-sm">/ BLN</span></p>
+                        </div>
+                        <div class="glass-card p-10 bg-[#1C0770] text-white flex flex-col justify-between">
+                            <h4 class="text-2xl font-black text-[#b2d8d8]">Mulai Upgrade</h4>
+                            <button onclick="goToCheckout()" class="w-full py-5 bg-[#b2d8d8] text-[#1C0770] font-black rounded-xl border-2 border-[#1C0770]">BELI PAKET PRO</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Checkout & Verify steps -->
+                <div id="premium-checkout" class="hidden max-w-2xl mx-auto text-[#1C0770]">
+                    <h3 class="text-3xl font-black mb-8">Pembayaran</h3>
+                    <div class="glass-card p-8 space-y-4">
+                        <div onclick="selectMethod('qris')" class="p-6 border-2 border-[#1C0770] rounded-xl cursor-pointer hover:bg-[#b2d8d8]/20 font-black text-center">QRIS / E-Wallet</div>
+                        <button onclick="goToVerify()" id="btn-confirm-pay" class="w-full py-4 bg-[#1C0770] text-white font-black rounded-xl mt-6">KONFIRMASI</button>
+                    </div>
+                </div>
+
+                <div id="premium-verify" class="hidden max-w-xl mx-auto text-center text-[#1C0770]">
+                    <h3 class="text-3xl font-black mb-10">Verifikasi E-KYC</h3>
+                    <div class="glass-card p-12 bg-white relative">
+                        <div class="w-64 h-64 bg-slate-100 rounded-3xl mx-auto mb-8 border-4 border-[#1C0770] relative overflow-hidden flex items-center justify-center">
+                            <div class="scan-line hidden" id="scan-animation"></div>
+                            <span id="verify-icon" class="text-6xl">👤</span>
+                        </div>
+                        <button onclick="startScanning()" id="btn-scan" class="btn-action w-full justify-center">MULAI SCAN</button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- MODAL: ADD TRANSACTION -->
+    <div id="modal-tx" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#1C0770]/80">
+        <div class="bg-white border-4 border-[#1C0770] rounded-[30px] w-full max-w-md p-10 text-[#1C0770]">
+            <h3 id="modal-title" class="text-2xl font-black mb-8">Tambah Transaksi</h3>
+            <form onsubmit="saveTransaction(event)" class="space-y-6">
+                <input type="text" id="tx-desc" placeholder="Deskripsi..." required>
+                <input type="number" id="tx-amt" placeholder="Nominal..." required>
+                <div class="flex gap-4">
+                    <button type="button" onclick="closeTxModal()" class="flex-1 py-4 bg-slate-100 font-black rounded-xl">BATAL</button>
+                    <button type="submit" class="flex-1 py-4 bg-[#1C0770] text-white font-black rounded-xl">SIMPAN</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
